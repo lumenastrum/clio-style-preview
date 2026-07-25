@@ -1,6 +1,6 @@
 """KREA 2 Turbo txt2img, headless, with style-library support. By Clio.
 Core recipe from ComfyUI's official KREA 2 template (krea2 TE type, euler/simple,
-8 steps, cfg 1). LoRA is OPT-IN via --lora. --style pulls from the 281-entry
+8 steps, cfg 1). LoRA is OPT-IN via --lora. --style pulls from the 397-entry
 style library through the ClioStyle node (which must be installed = this repo
 cloned into custom_nodes and ComfyUI restarted)."""
 import argparse

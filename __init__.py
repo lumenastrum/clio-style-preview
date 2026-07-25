@@ -1,5 +1,5 @@
 """💅 Clio Style Library — prompt style injector for KREA 2 / Qwen-encoder models.
-Styles live in styles.json beside this file (source: pastebin RgjkbYHH, 281 entries).
+Styles live in styles.json beside this file (style library by u/Dear-Spend-2865, 397 entries).
 Edit styles.json + refresh the browser to pick up changes — no server restart needed
 (INPUT_TYPES re-reads the file on every /object_info fetch).
 """
@@ -38,7 +38,7 @@ class ClioStyle:
     RETURN_NAMES = ("styled_prompt", "style_name", "filename_prefix")
     FUNCTION = "apply"
     CATEGORY = "Clio 💅"
-    DESCRIPTION = "Injects a style paragraph from the 281-entry library into your prompt. " \
+    DESCRIPTION = "Injects a style paragraph from the 397-entry library into your prompt. " \
                   "Outputs the styled prompt, the bare style name, and a Krea2/<style> filename prefix."
 
     def apply(self, prompt, style, template):
