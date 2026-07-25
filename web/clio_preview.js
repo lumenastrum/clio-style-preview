@@ -157,12 +157,22 @@ app.registerExtension({
       const wrap = document.createElement("div");
       wrap.style.cssText =
         "position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;" +
-        "background:#1a1418;border:1px solid #3a2a33;border-radius:8px;overflow:hidden;cursor:pointer;" +
-        "font-family:sans-serif;user-select:none;";
+        "gap:10px;background:#1a1418;border:1px solid #3a2a33;border-radius:8px;overflow:hidden;" +
+        "cursor:pointer;font-family:sans-serif;user-select:none;";
+
+      // The frame hugs the render instead of spanning the node. Width follows the
+      // image's own aspect at full height (height-driven, width:auto), so the
+      // caption sits ON the art instead of stretching across the letterbox next
+      // to it — and the node's panel reads as a deliberate mat, not dead space.
+      const frame = document.createElement("div");
+      frame.style.cssText =
+        "position:relative;align-self:stretch;max-width:100%;display:none;" +
+        "border-radius:6px;overflow:hidden;";
 
       const img = document.createElement("img");
-      // contain, not cover — the render is square and should never be cropped
-      img.style.cssText = "width:100%;height:100%;object-fit:contain;display:none;";
+      // never cropped: contain keeps odd aspects honest, width:auto means the
+      // element itself carries no dead width for the caption to span
+      img.style.cssText = "height:100%;width:auto;max-width:100%;object-fit:contain;display:block;";
       img.draggable = false;
 
       const empty = document.createElement("div");
@@ -171,11 +181,12 @@ app.registerExtension({
 
       const caption = document.createElement("div");
       caption.style.cssText =
-        "position:absolute;left:0;right:0;bottom:0;padding:4px 34px;font-size:11px;color:" + PINK + ";" +
+        "position:absolute;left:0;right:0;bottom:0;padding:4px 10px;font-size:11px;color:" + PINK + ";" +
         "background:linear-gradient(transparent,rgba(20,10,16,.85));text-shadow:0 1px 2px #000;" +
-        "white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;display:none;";
+        "white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;";
 
-      wrap.append(img, empty, caption);
+      frame.append(img, caption);
+      wrap.append(frame, empty);
       wrap.addEventListener("click", async () => {
         const styleWidget = this.widgets?.find((w) => w.name === "style");
         if (!styleWidget) return;
@@ -214,29 +225,30 @@ app.registerExtension({
         const b = document.createElement("button");
         b.textContent = dir < 0 ? "‹" : "›";
         b.style.cssText =
-          "position:absolute;top:50%;transform:translateY(-50%);" + (dir < 0 ? "left:6px;" : "right:6px;") +
-          "width:26px;height:34px;border:none;border-radius:7px;background:rgba(20,10,16,.55);color:" + PINK + ";" +
-          "font-size:18px;cursor:pointer;opacity:.65;transition:opacity .15s;line-height:1;padding:0;";
+          "flex:0 0 auto;width:26px;height:34px;border:none;border-radius:7px;background:rgba(20,10,16,.55);" +
+          "color:" + PINK + ";font-size:18px;cursor:pointer;opacity:.65;transition:opacity .15s;" +
+          "line-height:1;padding:0;";
         b.addEventListener("mouseenter", () => (b.style.opacity = "1"));
         b.addEventListener("mouseleave", () => (b.style.opacity = ".65"));
         b.addEventListener("click", (e) => { e.stopPropagation(); stepStyle(dir); });
-        wrap.append(b);
+        // flex siblings, not absolute — the controls flank the render and stay
+        // grouped with it, instead of stranded at the panel edges when a square
+        // thumb leaves a wide mat either side
+        if (dir < 0) wrap.prepend(b); else wrap.append(b);
       }
 
       const update = () => {
         const style = styleWidget?.value;
         if (!style || style === NONE) {
-          img.style.display = "none";
-          caption.style.display = "none";
+          frame.style.display = "none";
           empty.textContent = NONE_MSG;
           empty.style.display = "";
           wrap.title = "click to pick a style visually";
           return;
         }
         empty.style.display = "none";
-        caption.style.display = "";
+        frame.style.display = "";
         caption.textContent = style;
-        img.style.display = "";
         img.src = "/clio_style/thumb?style=" + encodeURIComponent(style);
         wrap.title = style + "\n\n(click to pick a style visually)";
         fetch("/clio_style/prose?style=" + encodeURIComponent(style))
@@ -252,8 +264,7 @@ app.registerExtension({
       };
 
       img.onerror = () => {
-        img.style.display = "none";
-        caption.style.display = "none";
+        frame.style.display = "none";
         empty.textContent = "✦ no preview render for this style yet";
         empty.style.display = "";
       };

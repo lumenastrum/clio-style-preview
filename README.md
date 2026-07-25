@@ -40,9 +40,13 @@ Editing `styles.json` needs no restart — refresh the browser and the node re-r
 
 A style name tells you nothing. `Berserk Manga Style` and `Yoshitaka Amano Style` are both "dark fantasy ink" until you look at them. So the node draws the selected style's gallery render **on itself**:
 
+![The ClioStyle node showing a live in-node preview of the selected style](docs/node-preview.png)
+
 - **Click the preview** → a searchable grid of all 397 style previews, filterable by tradition. Click a card to set the style.
 - **`‹` `›`** step through the library one style at a time (wrapping through `✨ none`) — good for browsing neighbours without opening anything.
 - **Hover** the preview to read the full style prose.
+
+![The visual style picker: 397 previews, searchable and filterable by tradition](docs/node-picker.png)
 
 The 512px thumbnails ship with the repo, so this works on a **fresh clone with no renders of your own**. Once you point the batch runner at *your* subject, the previews become your renders instead — same manifest, same node, no configuration.
 
