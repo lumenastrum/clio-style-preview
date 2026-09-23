@@ -794,18 +794,32 @@
     }
   }
 
-  function fullPrompt(sectionKey, style) {
+  // copy buttons hand out the node's current template, which puts the style's name back
+  // ahead of its prose (repo issue #5); sec.template stays the record of how renders were made
+  var COPY_TEMPLATES = { krea2: "Style: {name}: {style}. Subject: {prompt}" };
+
+  function copyTemplate(sectionKey) {
     var sec = manifest.sections[sectionKey] || {};
-    var tpl = sec.template || "Style: {style}. Subject: {prompt}";
-    // the real prompt uses the style's full prose paragraph; fall back to the name if styles.json wasn't reachable
-    return tpl.split("{prompt}").join(manifest.subject_prompt || "").split("{style}").join(styleTexts[style] || style);
+    return sec.copy_template || COPY_TEMPLATES[sectionKey] || sec.template || "Style: {style}. Subject: {prompt}";
+  }
+
+  function fillStyle(tpl, style) {
+    // "Film Noir (2)" is a dedupe suffix, not part of the name; without prose (styles.json unreachable)
+    // the name alone stands in for both slots, so drop the name slot rather than print it twice
+    var name = style.replace(/\s*\(\d+\)$/, "");
+    var prose = styleTexts[style];
+    if (!prose) tpl = tpl.split("{name}: ").join("").split("{name}").join("");
+    return tpl.split("{name}").join(name).split("{style}").join(prose || name);
+  }
+
+  function fullPrompt(sectionKey, style) {
+    // the real prompt uses the style's full prose paragraph
+    return fillStyle(copyTemplate(sectionKey), style).split("{prompt}").join(manifest.subject_prompt || "");
   }
 
   function stylePrePrompt(sectionKey, style) {
-    var sec = manifest.sections[sectionKey] || {};
-    var tpl = sec.template || "Style: {style}. Subject: {prompt}";
-    // everything before the subject slot, prose substituted — paste it ahead of your own prompt
-    return tpl.split("{prompt}")[0].split("{style}").join(styleTexts[style] || style).trim();
+    // everything before the subject slot, style filled in — paste it ahead of your own prompt
+    return fillStyle(copyTemplate(sectionKey).split("{prompt}")[0], style).trim();
   }
 
   // styles.json lives beside the gallery locally, or one level up in the repo layout

@@ -41,7 +41,7 @@ def krea2_turbo_workflow(positive, seed, w=1024, h=1024, steps=8, style=None,
     if style:
         graph["11"] = {"class_type": "ClioStyle",
                        "inputs": {"prompt": positive, "style": style,
-                                  "template": "Style: {style}. Subject: {prompt}"}}
+                                  "template": "Style: {name}: {style}. Subject: {prompt}"}}
         text_src, prefix_src = ["11", 0], ["11", 2]
     else:
         text_src, prefix_src = positive, prefix

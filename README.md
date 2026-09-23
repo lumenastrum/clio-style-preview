@@ -30,7 +30,7 @@ You get a **💅 Clio Style Library** node with:
 
 - `prompt` — your subject. Keep it **medium-silent** (no "photo of", no "illustration of") — every style claims its own medium, and a medium word in the subject arm-wrestles all 397 of them.
 - `style` — which style to apply. `✨ none` passes your prompt through untouched.
-- `template` — default `Style: {style}. Subject: {prompt}`. The delimited style-first format keeps object-noun styles (LEGO, Funko…) from literalizing into the scene as their own entity instead of restyling your subject — tip courtesy of u/Dear-Spend-2865, the source of the style library itself (see issue #1 for before/afters).
+- `template` — default `Style: {name}: {style}. Subject: {prompt}`. `{name}` is the style's name, `{style}` its prose paragraph, `{prompt}` your subject. The delimited style-first format keeps object-noun styles (LEGO, Funko…) from literalizing into the scene as their own entity instead of restyling your subject — tip courtesy of u/Dear-Spend-2865, the source of the style library itself (see issue #1 for before/afters). Putting the name back in front of the prose (as the original list wrote it) matters because most proses never say it themselves — Gravity Falls only looks like Gravity Falls once the name is in the prompt. Thanks to @JackPinette for catching it (issue #5). Workflows saved before this change keep their old template; drop `{name}: ` from the template to get the old behavior.
 
 Outputs: `styled_prompt` (→ your CLIP Text Encode), `style_name`, and `filename_prefix` (routes saves into a shared `Krea2/` folder with style-named files).
 

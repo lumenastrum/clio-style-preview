@@ -5,6 +5,7 @@ Edit styles.json + refresh the browser to pick up changes — no server restart 
 """
 import json
 import os
+import re
 
 _DIR = os.path.dirname(os.path.abspath(__file__))
 _STYLES_PATH = os.path.join(_DIR, "styles.json")
@@ -19,6 +20,11 @@ def _load_styles():
         return {}
 
 
+def _display_name(style):
+    # "Film Noir (2)" is a dedupe suffix for the dropdown, not part of the style's name
+    return re.sub(r"\s*\(\d+\)$", "", style)
+
+
 class ClioStyle:
     @classmethod
     def INPUT_TYPES(cls):
@@ -29,8 +35,10 @@ class ClioStyle:
                 "prompt": ("STRING", {"multiline": True, "default": "", "dynamicPrompts": False}),
                 "style": (names, {"default": _NONE}),
                 # Style-first delimited format keeps the style from literalizing into the
-                # scene as its own entity (tip from u/Dear-Spend-2865, see repo issue #1)
-                "template": ("STRING", {"default": "Style: {style}. Subject: {prompt}"}),
+                # scene as its own entity (tip from u/Dear-Spend-2865, see repo issue #1).
+                # {name} restores the style's name ahead of its prose, as the source list
+                # wrote it — many proses never say it themselves (repo issue #5)
+                "template": ("STRING", {"default": "Style: {name}: {style}. Subject: {prompt}"}),
             }
         }
 
@@ -47,9 +55,12 @@ class ClioStyle:
         if style == _NONE or not text:
             styled, name = prompt, "unstyled"
         elif not prompt:
-            styled, name = text, style
+            styled = f"{_display_name(style)}: {text}" if "{name}" in template else text
+            name = style
         else:
-            styled = template.replace("{prompt}", prompt).replace("{style}", text).strip()
+            # fill the style slots before the prompt, so braces in a user's prompt stay literal
+            styled = (template.replace("{name}", _display_name(style)).replace("{style}", text)
+                      .replace("{prompt}", prompt).strip())
             name = style
         safe = "".join(c for c in name if c.isalnum() or c in " -_()").strip()
         return (styled, name, "Krea2/" + safe)
