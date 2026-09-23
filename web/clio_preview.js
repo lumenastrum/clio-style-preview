@@ -66,6 +66,28 @@ async function getPicker() {
   const search = header.querySelector("input");
   const tradSel = header.querySelector("select");
   const closeBtn = header.querySelector("button");
+
+  // "no style" lives in the header, not the grid — it has no thumb to show, and
+  // with the dropdown hidden this is the only one-click path back to a raw prompt
+  const noneBtn = document.createElement("button");
+  noneBtn.textContent = "✨ no style";
+  noneBtn.title = "clear the style — prompt passes through untouched";
+  noneBtn.style.cssText =
+    "background:#241722;border:1px solid #46293a;border-radius:8px;color:#f4dce9;" +
+    "padding:6px 10px;font-size:13px;cursor:pointer;transition:border-color .12s;";
+  noneBtn.addEventListener("mouseenter", () => { if (noneBtn.style.borderColor !== GOLD) noneBtn.style.borderColor = "#7a3b5e"; });
+  noneBtn.addEventListener("mouseleave", () => {
+    noneBtn.style.borderColor = current?.styleWidget?.value === NONE ? GOLD : "#46293a";
+  });
+  noneBtn.addEventListener("click", () => {
+    if (!current) return;
+    const { node, styleWidget } = current;
+    styleWidget.value = NONE;
+    styleWidget.callback?.(NONE, app.canvas, node);
+    node.setDirtyCanvas(true, true);
+    hide();
+  });
+  header.insertBefore(noneBtn, header.querySelector("a"));
   tradSel.innerHTML =
     `<option value="">all traditions</option>` +
     sectionOrder.map((s) => `<option value="${s}">${s}</option>`).join("");
@@ -129,6 +151,7 @@ async function getPicker() {
       tile.style.borderColor = isSel ? GOLD : "transparent";
       if (isSel) selected = tile;
     }
+    noneBtn.style.borderColor = styleWidget.value === NONE ? GOLD : "#46293a";
     overlay.style.display = "flex";
     document.addEventListener("keydown", onKey, true);
     if (selected) selected.scrollIntoView({ block: "center" });
