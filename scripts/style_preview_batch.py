@@ -44,7 +44,7 @@ def main():
     else:
         manifest = {"subject_prompt": args.prompt, "seed": args.seed,
                     "sections": {"krea2": {"title": "KREA 2 Turbo",
-                                           "template": "Style: {style}. Subject: {prompt}", "images": []}}}
+                                           "template": "Style: {name}: {style}. Subject: {prompt}", "images": []}}}
 
     done = {e["style"] for e in manifest["sections"]["krea2"]["images"]
             if os.path.exists(os.path.join(out_root, e["file"]))}

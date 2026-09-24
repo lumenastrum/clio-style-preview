@@ -4,7 +4,7 @@
  "sections": {
   "krea2": {
    "title": "KREA 2 Turbo",
-   "template": "Style: {style}. Subject: {prompt}",
+   "template": "Style: {name}: {style}. Subject: {prompt}",
    "images": [
     {
      "style": "Anime Style",
