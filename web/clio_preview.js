@@ -46,7 +46,7 @@ async function getPicker() {
     "display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid #35222c;flex-wrap:wrap;";
   header.innerHTML =
     `<span style="color:${PINK};font-size:15px;font-weight:600;">💅 pick a style</span>` +
-    `<input type="text" placeholder="search 397 styles…" style="flex:1;min-width:160px;background:#241722;` +
+    `<input type="text" placeholder="search 398 styles…" style="flex:1;min-width:160px;background:#241722;` +
     `border:1px solid #46293a;border-radius:8px;color:#f4dce9;padding:6px 10px;font-size:13px;outline:none;">` +
     `<select style="background:#241722;border:1px solid #46293a;border-radius:8px;color:#f4dce9;padding:6px;font-size:13px;"></select>` +
     `<a href="/clio_style/gallery/index.html" target="_blank" style="color:${GOLD};font-size:12px;text-decoration:none;">open full gallery ↗</a>` +

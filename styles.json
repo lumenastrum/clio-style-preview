@@ -291,7 +291,7 @@
  },
  {
   "name": "South Park Style",
-  "prompt": "A crude, deliberately flat cutout-illustration style built on rigid, geometric construction that mimics paper-cutout assembly rather than fluid drawing, minimal internal shading applied in flat, uniform blocks with almost no gradation, an intentionally stiff, limited sense of motion and pose that embraces its own construction-paper simplicity, bold, thick outline separating each simplified shape with graphic clarity, and a crude, deadpan comedic charm that feels deliberately unpolished and instantly recognizable. Influenced by: Trey Parker and Matt Stone, construction-paper stop-motion-inspired animation technique, flat cutout-illustration tradition, deadpan cartoon-design practice.",
+  "prompt": "A crude construction-paper cutout cartoon style exactly like the South Park TV show: the character is rebuilt as a short, stubby paper-cutout figure with an oversized round head wider than her tiny body, two large white oval eyes touching in the middle with small black dot pupils, a simple flap mouth, mitten hands with no fingers, stiff flat front-facing pose, flat solid colors with no shading, visible construction-paper texture and slightly jagged cut edges, a flat layered-paper background of a small Colorado mountain-town bedroom. Influenced by: Trey Parker and Matt Stone, South Park construction-paper animation, cutout stop-motion technique, deadpan cartoon-design practice.",
   "section": "Cartoon"
  },
  {
@@ -516,7 +516,7 @@
  },
  {
   "name": "Clean Line Art",
-  "prompt": "refined line-focused aesthetics characterized by crisp contours, exceptional visual clarity, disciplined draftsmanship, controlled line weight, and highly readable form construction, emphasizing precision, elegance, and structural coherence through polished execution, simplified visual noise, and a timeless graphic sensibility that balances sophistication with effortless readability, reminiscent of Hergé and Yves Chaland, inspired by Tintin and Blake et Mortimer.",
+  "prompt": "A clean, precise line-art illustration style built on steady black ink contours of uniform, unmodulated weight, every shape fully closed and crisply defined, flat unshaded color fills with no hatching, no texture and no gradients, restrained modern palette, generous negative space, careful proportions and tidy draftsmanship, and a calm, contemporary editorial clarity that reads instantly at any size. Influenced by: contemporary editorial line illustration, technical-pen drafting, flat-color print illustration, minimalist ink drawing.",
   "section": "Comics"
  },
  {
@@ -716,7 +716,7 @@
  },
  {
   "name": "Calligraphic Linework",
-  "prompt": "refined line-centric aesthetics characterized by fluid strokes, graceful visual rhythm, expressive contour variation, elegant mark-making, and exceptional draftsmanship, emphasizing movement, balance, and artistic confidence through controlled line weight, organic transitions, and a harmonious interplay between precision and spontaneity, reminiscent of Egon Schiele and Katsuya Terada, inspired by The Book of Kells and Ukiyo-e brush drawing traditions.0",
+  "prompt": "refined line-centric aesthetics characterized by fluid strokes, graceful visual rhythm, expressive contour variation, elegant mark-making, and exceptional draftsmanship, emphasizing movement, balance, and artistic confidence through controlled line weight, organic transitions, and a harmonious interplay between precision and spontaneity, reminiscent of Egon Schiele and Katsuya Terada, inspired by The Book of Kells and Ukiyo-e brush drawing traditions.",
   "section": "Drawing"
  },
  {
@@ -831,7 +831,7 @@
  },
  {
   "name": "Fish-Eye Photography",
-  "prompt": "A dramatically distorted photographic technique built on an ultra-wide spherical field of view that curves straight lines into pronounced convex bowing, an exaggerated sense of depth that pushes the center forward while compressing the periphery into curved recession, a heightened, immersive perspective that feels expansive and slightly disorienting, meticulous edge-to-edge sharpness typical of the lens's extreme depth of field, and a playful, surreal spatial distortion that transforms ordinary framing into something vividly exaggerated. Influenced by: fisheye-lens photographic tradition, ultra-wide-angle technique, skateboard and action-sports photography practice, experimental distortion-lens method.",
+  "prompt": "A real-life photograph of a real person, shot on a camera with an 8mm circular fisheye lens: the whole frame bends into a round, convex bubble, straight walls and ceiling lines curve outward, the center pushes toward the lens while the edges fall away into a dark circular vignette, natural skin texture, real fabric and room detail, available-light exposure and slight digital noise, candid and playful like a doorway or skate-video snapshot, photographic realism, not an illustration. Influenced by: fisheye-lens photography, ultra-wide-angle technique, skateboard and action-sports photography, peephole and doorbell-camera snapshots.",
   "section": "Photography"
  },
  {
@@ -846,7 +846,7 @@
  },
  {
   "name": "Dutch Angle Photography",
-  "prompt": "dynamic photographic aesthetics characterized by intentional camera tilt, visual tension, dramatic perspective, heightened energy, and cinematic composition, using unconventional framing to create psychological intensity and narrative momentum through controlled imbalance, atmospheric depth, refined lighting, and striking visual storytelling, reminiscent of Orson Welles and Gregg Toland, inspired by The Third Man and Citizen Kane.",
+  "prompt": "A cinematic photograph in which the entire image is rotated about 30 degrees clockwise, as if the photographer tilted the camera sideways: the floor line, the bed, the window, the door frame, the ceiling edge and the woman herself are all strongly slanted across the frame and nothing in the picture is level or vertical, a disorienting canted composition, low-key film-noir lighting with deep shadows and one hard light source, real skin texture and photographic grain. Influenced by: canted-angle film-noir cinematography, The Third Man, psychological-thriller camerawork.",
   "section": "Photography"
  },
  {
@@ -991,7 +991,7 @@
  },
  {
   "name": "Stranger Things-Inspired Art",
-  "prompt": "A moody, atmospheric illustration style built on thick, engulfing haze that swallows peripheral detail while a single dramatic source pierces through with sharp, saturated intensity, a nostalgic, retro-cinematic grain layered over the entire composition, tense, low-angle framing that charges ordinary space with looming unease, a deliberate contrast between soft ambient glow and harsh directional flare, and a suspenseful, synth-scored nostalgia that feels equal parts childhood wonder and creeping dread. Influenced by: 1980s horror-cinema visual tradition, retro VHS film-grain technique, practical-effects horror lighting practice, synth-era genre-film aesthetic.",
+  "prompt": "A painted 1980s movie-poster illustration in the manner of the Stranger Things key art: airbrushed and colored-pencil rendering, glowing red rim light against a deep blue night, hazy halos and lens glow, rich painterly skin and fabric, nostalgic Amblin-era theatrical poster painting with dramatic lighting and a cinematic mood. Influenced by: Drew Struzan, Kyle Lambert, 1980s airbrushed movie-poster tradition.",
   "section": "Photography"
  },
  {
@@ -1257,6 +1257,11 @@
  {
   "name": "Zelda Wind Waker Style",
   "prompt": "A vibrant, toon-shaded illustration style built on crisp, hard-edged cel shading with minimal tonal gradation, confident, thick outline holding clean, geometric silhouette design, warm painterly sky and terrain rendered with soft matte-painted texture, expressive, rounded character proportions carrying whimsical charm, and a bright, adventurous storybook vibrancy that feels playful, timeless, and quietly heroic.Influenced by: Nintendo character-art direction, cel-shaded toon-rendering technique, painterly matte-background practice, whimsical adventure-game illustration method.",
+  "section": "3D Render"
+ },
+ {
+  "name": "Breath of the Wild Style",
+  "prompt": "An in-game 3D screenshot in the art style of The Legend of Zelda: Breath of the Wild: a toon-shaded three-dimensional character model with soft painterly cel shading and gentle rim light, a muted, airy pastel palette, hand-painted watercolor-like textures on every surface, soft hazy atmospheric perspective with bloom and drifting light, stylized chunky 3D props and furniture, warm golden light spilling through the window, and the calm, wistful, painterly-3D look of Nintendo's open-world adventure. Influenced by: Breath of the Wild and Tears of the Kingdom art direction, painterly toon-shaded 3D rendering, Nintendo EPD, impressionist-inspired game environments.",
   "section": "3D Render"
  },
  {
