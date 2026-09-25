@@ -9,6 +9,7 @@ import re
 
 _DIR = os.path.dirname(os.path.abspath(__file__))
 _STYLES_PATH = os.path.join(_DIR, "styles.json")
+_FAVORITES_PATH = os.path.join(_DIR, "favorites.json")
 _NONE = "✨ none"
 
 
@@ -23,6 +24,19 @@ def _load_styles():
 def _display_name(style):
     # "Film Noir (2)" is a dedupe suffix for the dropdown, not part of the style's name
     return re.sub(r"\s*\(\d+\)$", "", style)
+
+
+def _load_favorites():
+    try:
+        with open(_FAVORITES_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return []
+
+
+def _save_favorites(names):
+    with open(_FAVORITES_PATH, "w", encoding="utf-8") as f:
+        json.dump(names, f, ensure_ascii=False, indent=1)
 
 
 class ClioStyle:
@@ -115,6 +129,25 @@ try:
     @PromptServer.instance.routes.get("/clio_style/styles.json")
     async def _clio_style_styles(request):
         return _web.FileResponse(_STYLES_PATH)
+
+    # favorites persist server-side (favorites.json, gitignored) so they
+    # survive restarts and are shared across every browser hitting this server
+    @PromptServer.instance.routes.get("/clio_style/favorites")
+    async def _clio_style_favorites_get(request):
+        return _web.json_response(_load_favorites())
+
+    @PromptServer.instance.routes.post("/clio_style/favorites")
+    async def _clio_style_favorites_post(request):
+        data = await request.json()
+        style = data.get("style", "")
+        favorite = bool(data.get("favorite"))
+        names = _load_favorites()
+        if favorite and style not in names:
+            names.append(style)
+        elif not favorite and style in names:
+            names.remove(style)
+        _save_favorites(names)
+        return _web.json_response(names)
 
     # the whole web gallery, served by ComfyUI itself — the node preview links to it
     PromptServer.instance.routes.static("/clio_style/gallery", _GALLERY)
