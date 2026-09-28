@@ -66,8 +66,55 @@ class ClioStyle:
         return (styled, name, "Krea2/" + safe)
 
 
-NODE_CLASS_MAPPINGS = {"ClioStyle": ClioStyle}
-NODE_DISPLAY_NAME_MAPPINGS = {"ClioStyle": "💅 Clio Style Library"}
+class ClioStyleEncode:
+    """ClioStyle + CLIP Text Encode in one node, with a style STRENGTH slider.
+
+    Prompt weights like (text:0.8) do nothing on KREA 2 in ComfyUI: its Qwen3-VL text encoder
+    tokenizes with weights disabled, so the parens and number are read as literal text. Softer
+    wording ("a light touch of ...") didn't weaken the styles either. What does work is
+    blending conditioning: encode the styled prompt and your plain prompt, then average them
+    (core ConditioningAverage). A/B on seed 1997 (Simpsons/Manga/Ghibli): 0.5 gives a genuine
+    in-between style, 0.25 is mostly unstyled, 0.75 is mostly styled. This node runs the core
+    nodes themselves, so it matches that hand-built graph exactly."""
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "clip": ("CLIP",),
+                **ClioStyle.INPUT_TYPES()["required"],
+                "strength": ("FLOAT", {
+                    "default": 1.0, "min": 0.0, "max": 1.0, "step": 0.05,
+                    "tooltip": "1.0 = full style, 0 = your prompt unstyled. Not linear: around 0.5 "
+                               "blends the two looks, 0.25 is mostly unstyled, 0.75 mostly styled.",
+                }),
+            }
+        }
+
+    RETURN_TYPES = ("CONDITIONING", "STRING", "STRING", "STRING")
+    RETURN_NAMES = ("conditioning", "styled_prompt", "style_name", "filename_prefix")
+    FUNCTION = "encode"
+    CATEGORY = "Clio 💅"
+    DESCRIPTION = "Clio Style Library + text encode, with a style strength slider (a conditioning " \
+                  "blend between the styled prompt and your plain prompt; prompt weights don't work on KREA 2)."
+
+    def encode(self, clip, prompt, style, template, strength):
+        import nodes  # lazy, so scripts can import this file without a running ComfyUI
+
+        styled, name, prefix = ClioStyle().apply(prompt, style, template)
+        plain = prompt.strip()
+        encode = nodes.CLIPTextEncode().encode
+        if strength <= 0.0:
+            cond = encode(clip, plain)[0]  # a clean unstyled encode, not a zero-padded blend
+        else:
+            cond = encode(clip, styled)[0]
+            if strength < 1.0 and styled != plain:
+                cond = nodes.ConditioningAverage().addWeighted(cond, encode(clip, plain)[0], strength)[0]
+        return (cond, styled, name, prefix)
+
+
+NODE_CLASS_MAPPINGS = {"ClioStyle": ClioStyle, "ClioStyleEncode": ClioStyleEncode}
+NODE_DISPLAY_NAME_MAPPINGS = {"ClioStyle": "💅 Clio Style Library", "ClioStyleEncode": "💅 Clio Style Encode"}
 WEB_DIRECTORY = "./web"
 
 

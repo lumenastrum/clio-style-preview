@@ -12,7 +12,7 @@ Built for [KREA 2 Turbo](https://huggingface.co/Comfy-Org/Krea-2) and other long
 
 | Piece | What it does |
 |---|---|
-| `__init__.py` + `styles.json` | The **ClioStyle** custom node — 398 styles, injected into your prompt as dense style prose |
+| `__init__.py` + `styles.json` | The **ClioStyle** custom node — 398 styles, injected into your prompt as dense style prose — plus **ClioStyleEncode**, the same thing with a built-in text encode and a style **strength** slider |
 | `web/` | The node's **in-node preview + visual style picker** — see a style before you commit to it, without leaving the graph |
 | `gallery/` | A self-contained style-preview gallery (vanilla JS, zero dependencies) with search, tradition filter, lightbox, and a **split-slider compare** |
 | `scripts/` | Headless pipeline: single gens with `--style`, and a batch runner that renders one subject through the *entire* library |
@@ -35,6 +35,20 @@ You get a **💅 Clio Style Library** node with:
 Outputs: `styled_prompt` (→ your CLIP Text Encode), `style_name`, and `filename_prefix` (routes saves into a shared `Krea2/` folder with style-named files).
 
 Editing `styles.json` needs no restart — refresh the browser and the node re-reads it.
+
+### Dialing a style down: 💅 Clio Style Encode
+
+Prompt weights like `(style:0.8)` **don't work on KREA 2 in ComfyUI**. Its Qwen3-VL text encoder tokenizes with weights disabled, so the parentheses and the number are read as literal text (we A/B'd `0.3` against `1.5`: both came out full strength). Softer wording ("a light touch of…") didn't dial it down either.
+
+What does work is blending conditioning, so there's a second node, **💅 Clio Style Encode**: the same style picker, preview and template, plus a `clip` input and a `strength` slider, and it outputs `conditioning` directly (no separate CLIP Text Encode). Under the hood it encodes the styled prompt and your plain prompt and averages them with core `ConditioningAverage`, pixel-identical to wiring that by hand.
+
+![The same subject at strength 0, 0.25, 0.5, 0.75 and 1.0 in Simpsons, Manga and Ghibli styles](docs/strength_sweep.png)
+
+- `1.0` is the full style (identical to Clio Style Library → CLIP Text Encode); `0` is your prompt unstyled.
+- It's **not linear**, and every style has its own tipping point. 0.25 stays mostly unstyled; around 0.5 you get genuine in-between looks (Simpsons at 0.5 lands on a Futurama-ish western cartoon); some styles flip late (Manga goes black-and-white between 0.5 and 0.75).
+- Wire `conditioning` to your sampler's positive. At CFG 1, a `ConditioningZeroOut` of the same output still works as the negative.
+
+Thanks to u/hansolocambo for asking the question that led here.
 
 ### See the style before you pick it
 

@@ -171,7 +171,8 @@ async function getPicker() {
 app.registerExtension({
   name: "clio.stylePreview",
   beforeRegisterNodeDef(nodeType, nodeData) {
-    if (nodeData.name !== "ClioStyle") return;
+    // both nodes carry the same style widget, so both get the preview + picker
+    if (nodeData.name !== "ClioStyle" && nodeData.name !== "ClioStyleEncode") return;
 
     const onNodeCreated = nodeType.prototype.onNodeCreated;
     nodeType.prototype.onNodeCreated = function () {
