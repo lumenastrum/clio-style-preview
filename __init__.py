@@ -1,5 +1,5 @@
 """💅 Clio Style Library — prompt style injector for KREA 2 / Qwen-encoder models.
-Styles live in styles.json beside this file (style library by u/Dear-Spend-2865, 414 entries).
+Styles live in styles.json beside this file (414 entries: the style library by u/Dear-Spend-2865 plus our own additions).
 Edit styles.json + refresh the browser to pick up changes — no server restart needed
 (INPUT_TYPES re-reads the file on every /object_info fetch).
 """
