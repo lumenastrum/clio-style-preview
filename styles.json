@@ -246,7 +246,7 @@
  },
  {
   "name": "Yoshiyuki Sadamoto Style",
-  "prompt": "A refined, elegant anime-illustration style built on confident, restrained linework carrying a subtly stylized proportion, muted cel-based shading with delicate gradation rather than sharp contrast, and a sophisticated. Influenced by: Yoshiyuki Sadamoto, Studio Gainax animation-adaptation tradition, cel-shaded design technique, Neon Genesis Evangelion illustration practice.",
+  "prompt": "Yoshiyuki Sadamoto's illustration style: refined, elegant anime character art with thin, precise, confident pen linework, slender elongated figures with narrow shoulders, long limbs, and small mouths, sharp angular eyes with thin upper lids and slim eyebrows, flat watercolor-like coloring with soft restrained shading and no harsh contrast, a muted, sophisticated palette, and a clean poster-like composition on a plain light background. Influenced by: Yoshiyuki Sadamoto, Neon Genesis Evangelion promotional art, Der Mond artbook, FLCL, Gainax character design.",
   "section": "Anime"
  },
  {
@@ -262,6 +262,36 @@
  {
   "name": "Yu-Gi-Oh! Style",
   "prompt": "A bold, expressive shōnen-manga illustration style built on confident, angular linework carrying dramatic, dynamic design, dense cel-based shading punctuated by sharp specular highlight detail, a theatrical, high-stakes intensity conveyed through dramatic composition, meticulous attention to costume and design rendering rewarding close inspection. Influenced by: Kazuki Takahashi,   Yu-Gi-Oh! Anime, Studio Gallop animation, cel-shaded shōnen illustration technique,",
+  "section": "Anime"
+ },
+ {
+  "name": "Satoshi Urushihara Style",
+  "prompt": "Satoshi Urushihara's style: glossy airbrushed rendering with soft gradient shading and wet-looking highlights on skin and hair, large luminous eyes, meticulously sculpted flowing hair, and a polished 1990s OVA cover-art finish. Influenced by: Satoshi Urushihara, Plastic Little, Langrisser, Growlanser.",
+  "section": "Anime"
+ },
+ {
+  "name": "Naoki Urasawa Style",
+  "prompt": "Naoki Urasawa's black-and-white manga style: realistic, individually distinct faces with real noses, jaws, and expression lines, restrained fine ink linework with light screentone and hatching, grounded everyday clothing and settings, and a quiet, cinematic psychological-thriller mood. Influenced by: Naoki Urasawa, Monster, 20th Century Boys, Pluto.",
+  "section": "Anime"
+ },
+ {
+  "name": "Hiroyuki Okiura Style",
+  "prompt": "Hiroyuki Okiura's Jin-Roh style: grounded, realistically proportioned figures with visible weight and heft, subdued realistic faces with small, quiet eyes, meticulously rendered clothing folds, and a muted palette of browns, greys, and cold blues under soft, sombre painterly lighting. Influenced by: Hiroyuki Okiura, Jin-Roh: The Wolf Brigade, A Letter to Momo, Production I.G.",
+  "section": "Anime"
+ },
+ {
+  "name": "Attack on Titan (WIT Studio) Style",
+  "prompt": "Attack on Titan seasons 1-3 (WIT Studio) style: smooth, polished TV anime cel finish with clean bold black outlines, hard-edged two-tone cel shading with deep shadow, sharp intense faces with heavy brows and strongly drawn eyes, and a gritty, warm earth-tone palette of browns, olive, and tan under high-contrast lighting. Influenced by: WIT Studio, Attack on Titan seasons 1-3, Kyoji Asano character designs.",
+  "section": "Anime"
+ },
+ {
+  "name": "Attack on Titan (MAPPA) Style",
+  "prompt": "Attack on Titan Final Season (MAPPA) style: thin, clean, uniform digital linework, soft flat cel shading with restrained shadow, realistic subdued faces and proportions with delicate hatched shading lines under the eyes and beneath the brows, and a cold, desaturated but colored palette of steel blue, grey, and muted khaki with a faint film grain. Influenced by: MAPPA, Attack on Titan Final Season, Tomohiro Kishi character designs.",
+  "section": "Anime"
+ },
+ {
+  "name": "Gainax Style",
+  "prompt": "1990s Gainax anime style, as a Neon Genesis Evangelion episode screenshot: Yoshiyuki Sadamoto's slender, long-limbed figures with narrow shoulders and small mouths, sharp angular eyes with thin upper lids and slim eyebrows, thin precise cel linework, hard-edged cel shading with deep shadow, a muted 1990s cel palette of dusty greens, greys, and warm skin under flat overcast light, and cinematic wide framing on hand-painted backgrounds with faint film grain. Influenced by: Gainax, Neon Genesis Evangelion (1995), Yoshiyuki Sadamoto character designs, Hideaki Anno.",
   "section": "Anime"
  },
  {
@@ -372,6 +402,26 @@
  {
   "name": "Peanuts Cartoon Style",
   "prompt": "A charming, simplified illustration style built on confident, minimal outline holding rounded, flat, evenly applied color fill, an endearing, understated character-design language favoring gentle simplicity, expressive dot-eyes and economical facial gesture carrying quiet emotional depth, and a timeless, wholesome sincerity that feels tender, nostalgic, and effortlessly comforting. Influenced by: Charles Schulz, Peanuts cartoon, mid-century newspaper-comic-strip tradition, flat-color minimalist design technique, gentle everyday-life illustration practice.",
+  "section": "Cartoon"
+ },
+ {
+  "name": "Genndy Tartakovsky Style",
+  "prompt": "Genndy Tartakovsky's Samurai Jack style: flat graphic shapes with no outlines, angular simplified figures with sharp geometric faces, bold flat color fields, and dramatic use of negative space. Influenced by: Genndy Tartakovsky, Samurai Jack, Primal.",
+  "section": "Cartoon"
+ },
+ {
+  "name": "X-Men: The Animated Series Style",
+  "prompt": "X-Men: The Animated Series (1992) style: 1990s Saturday-morning cel animation with bold black outlines, flat cel shading in two tones, Jim Lee-derived heroic anatomy with strong jaws and big hair, saturated primary colors, and painted airbrushed backgrounds. Influenced by: X-Men: The Animated Series, Fox Kids, Jim Lee, 1990s Marvel animation.",
+  "section": "Cartoon"
+ },
+ {
+  "name": "Dexter's Laboratory Style",
+  "prompt": "Dexter's Laboratory style: 1990s Cartoon Network cel cartoon with thick uniform black outlines, retro UPA-inspired geometric character design with oversized heads, tiny bodies, noodle limbs, and simple dot-and-oval eyes, flat solid colors with no shading, and stylized angular 1950s-modern backgrounds. Influenced by: Dexter's Laboratory, Genndy Tartakovsky, Cartoon Network Cartoon Cartoons, UPA animation.",
+  "section": "Cartoon"
+ },
+ {
+  "name": "Powerpuff Girls Style",
+  "prompt": "The Powerpuff Girls (1998) style: Craig McCracken's Cartoon Network cel cartoon with characters drawn at a two-heads-tall super-deformed scale as tiny kindergarten-sized figures barely taller than the furniture around them, the huge round head as big as the entire stubby body, replacing naturalistic anatomy entirely, no fingers, no neck, and no nose, enormous round eyes filling most of the face with a thick black outline ring, thick uniform black outlines, flat bright solid colors with no shading, and simple geometric 1950s-modern backgrounds. Influenced by: The Powerpuff Girls, Craig McCracken, Cartoon Network Cartoon Cartoons, UPA animation.",
   "section": "Cartoon"
  },
  {
@@ -1607,6 +1657,11 @@
  {
   "name": "Editorial Illustration",
   "prompt": "A conceptually driven illustration style built on confident, considered composition designed to communicate a single idea with immediate clarity, restrained shading and color logic that supports rather than overwhelms the central concept, meticulous attention to symbolic or metaphorical visual shorthand, a polished, deadline-tested economy of mark-making that favors clever communication over exhaustive rendering, and a sharp, intelligent illustrative wit rooted in contemporary magazine and publication practice. Influenced by: contemporary editorial-illustration tradition, conceptual magazine-illustration technique, symbolic visual-metaphor practice, publication-illustration method.",
+  "section": "Digital Painting"
+ },
+ {
+  "name": "Hades Style",
+  "prompt": "Hades (Supergiant Games) style: Jen Zee's painterly character-portrait art with bold, confident brushwork, sharp angular anatomy and chiseled faces with heavy brows, a deep saturated palette of crimson, black, and gold lit by hot neon rim light, ornate gold Greek ornament, and thick graphic black shadow shapes. Influenced by: Hades, Supergiant Games, Jen Zee, Greek mythology.",
   "section": "Digital Painting"
  },
  {
