@@ -421,7 +421,7 @@
  },
  {
   "name": "Powerpuff Girls Style",
-  "prompt": "The Powerpuff Girls (1998) style: Craig McCracken's Cartoon Network cel cartoon with characters drawn at a two-heads-tall super-deformed scale as tiny kindergarten-sized figures barely taller than the furniture around them, the huge round head as big as the entire stubby body, replacing naturalistic anatomy entirely, no fingers, no neck, and no nose, enormous round eyes filling most of the face with a thick black outline ring, thick uniform black outlines, flat bright solid colors with no shading, and simple geometric 1950s-modern backgrounds. Influenced by: The Powerpuff Girls, Craig McCracken, Cartoon Network Cartoon Cartoons, UPA animation.",
+  "prompt": "The Powerpuff Girls (1998) style: Craig McCracken's Cartoon Network cel cartoon where every character, whatever their age, is redrawn as a tiny super-deformed figure: a huge round head sitting directly on a small bell-shaped body no taller than the head itself, short noodle arms ending in round fingerless nub hands, two stubby little legs with white socks and black Mary Jane shoes, the whole tiny figure shown head to toe with open space around it, no neck, no nose, enormous round eyes filling most of the face with a thick black outline ring, thick uniform black outlines, flat bright solid colors with no shading, and simple geometric 1950s-modern backgrounds. Influenced by: The Powerpuff Girls, Craig McCracken, Cartoon Network Cartoon Cartoons, UPA animation.",
   "section": "Cartoon"
  },
  {
@@ -787,6 +787,11 @@
  {
   "name": "Stick-Figure Child Drawing",
   "prompt": "A radically minimal illustration style built on the barest possible linework needed to suggest form, simple circular head and straight-line limbs replacing any anatomical detail entirely, a wobbly, unpracticed economy of gesture , and a charmingly crude, innocent simplicity that feels spontaneous, playful, and completely unpolished. Influenced by: child-art tradition, crayon drawing technique, kindergarten art, naive-art,",
+  "section": "Drawing"
+ },
+ {
+  "name": "Troll Face",
+  "prompt": "A single 2011 internet rage comic panel drawn in Microsoft Paint, where the character herself is drawn entirely in crude, shaky, jagged black lines made with a computer mouse, her hair and clothes reduced to wobbly scribbled outlines, a stick-limbed body under a big round head whose face, whatever the scene, is always replaced by the grinning black-and-white Trollface, all squinting eyes, huge teeth and scribbled wrinkle lines, a pure white background with almost no scenery, and flat bucket-fill color in only one or two spots. Influenced by: rage comics, r/fffffffuuuuuuuuuuuu, 4chan, Microsoft Paint, early-2010s internet memes.",
   "section": "Drawing"
  },
  {
@@ -1311,7 +1316,7 @@
  },
  {
   "name": "Breath of the Wild Style",
-  "prompt": "An in-game 3D screenshot in the art style of The Legend of Zelda: Breath of the Wild: a toon-shaded three-dimensional character model with soft painterly cel shading and gentle rim light, a muted, airy pastel palette, hand-painted watercolor-like textures on every surface, soft hazy atmospheric perspective with bloom and drifting light, stylized chunky 3D props and furniture, warm golden light spilling through the window, and the calm, wistful, painterly-3D look of Nintendo's open-world adventure. Influenced by: Breath of the Wild and Tears of the Kingdom art direction, painterly toon-shaded 3D rendering, Nintendo EPD, impressionist-inspired game environments.",
+  "prompt": "An in-game Nintendo Switch screenshot of The Legend of Zelda: Breath of the Wild: every character is a real-time 3D game model with smooth, simplified geometry, gently realistic proportions and an understated face with small, simple eyes, lit with a soft two-tone toon-shading ramp that puts one crisp shadow edge across the face and clothes, cool blue-violet shadow tones against warm sunlit highlights, a bright white rim light tracing the silhouette, the surroundings built from simple, chunky modelled 3D geometry with soft ambient occlusion in the corners and creases, matte low-detail textures with faint brush-stroke grain, a sunlit, slightly desaturated pastel palette, and hazy blue atmospheric perspective softening everything in the distance. Influenced by: Breath of the Wild and Tears of the Kingdom art direction, Nintendo EPD, real-time toon-shaded 3D rendering.",
   "section": "3D Render"
  },
  {
@@ -1562,6 +1567,26 @@
  {
   "name": "Partial Wireframe 3D",
   "prompt": "A dimensionally precise digital-illustration style built on smooth, volumetric modeling that transitions abruptly into exposed geometric mesh across a portion of the extent, meticulously calculated illumination and specular response covering the fully rendered sections while the mesh-revealed areas stay flat and diagrammatic, confident sculptural construction contrasted against clean, technical grid-lines, a deliberate tension between finished dimensional realism and raw underlying structure, and a technically precise, computer-generated intensity that treats construction itself as part of the compositional subject. Influenced by: real-time 3D-rendering technique, wireframe-mesh visualization practice, physically based rendering (PBR) method, CGI production-pipeline aesthetic.",
+  "section": "3D Render"
+ },
+ {
+  "name": "Dead or Alive Style",
+  "prompt": "An in-game photo-mode screenshot of Dead or Alive Xtreme Venus Vacation by Team Ninja: every character is a high-polygon real-time 3D model with an idealized anime-meets-realistic face, large clear glossy eyes, a small refined nose and soft glossy lips on natural proportions, flawless porcelain skin with a luminous subsurface glow and a dewy, sun-kissed specular sheen, silky strand-rendered hair full of bright specular highlights, glossy fabric that catches the light, bright high-key lighting with soft bloom, a shallow depth of field and a clean, vivid, sparkling palette. Influenced by: Dead or Alive Xtreme Venus Vacation, Dead or Alive 6, Team Ninja's Soft Engine, Koei Tecmo real-time character rendering.",
+  "section": "3D Render"
+ },
+ {
+  "name": "Octopath Traveler HD-2D Style",
+  "prompt": "An in-game screenshot of Octopath Traveler in Square Enix's HD-2D style: every character is a small 2D pixel-art sprite with chunky, clearly visible square pixels and a limited palette, standing inside a richly detailed, realistically lit 3D diorama world, seen from a high three-quarter game camera with the tiny sprite small in the frame, strong tilt-shift depth of field melting the foreground and background into soft bokeh, warm glowing bloom, volumetric light shafts and drifting dust motes, real-time light and shadow falling across the flat sprites, and a moody, storybook cinematic color grade. Influenced by: Octopath Traveler, Octopath Traveler II, Triangle Strategy, Square Enix HD-2D, Acquire, 16-bit SNES JRPGs.",
+  "section": "3D Render"
+ },
+ {
+  "name": "Nintendo 64 Style",
+  "prompt": "An in-game screenshot of a 1998 Nintendo 64 game like The Legend of Zelda: Ocarina of Time, GoldenEye 007 and Super Smash Bros.: every character is a chunky low-polygon 3D model built from a few hundred triangles, with blocky angular limbs and simple blocky hands, smooth Gouraud shading that glides softly across each polygon so the low polygon count shows only in the jagged silhouette, a face that is a tiny low-resolution texture painted onto a simple rounded head with small simple dark eyes and a short line for a mouth, untextured surfaces in flat vertex colors, tiny low-resolution textures smeared soft and blurry by bilinear filtering so there are no crisp pixels anywhere, thick distance fog swallowing the background, bright saturated primary colors, flat simple lighting, and the soft 240p output of a CRT television. Influenced by: Nintendo 64, GoldenEye 007, Super Smash Bros. (1999), Super Mario 64, late-1990s real-time 3D.",
+  "section": "3D Render"
+ },
+ {
+  "name": "Street Fighter IV Style",
+  "prompt": "An official Ultra Street Fighter IV character render by Capcom on a pale background: every character is a real-time 3D fighting-game model with exaggerated, chunky heroic proportions and boldly sculpted forms, outlined with thick hand-painted black sumi-e brush strokes that swell and taper along the silhouette, soft painterly shading brushed right onto the 3D model, a smooth, slightly glossy figurine sheen, splashes and drips of black calligraphy ink bursting around the figure, and a vivid, saturated palette of warm oranges, reds and golds against bright blues. Influenced by: Street Fighter IV, Super Street Fighter IV, Ultra Street Fighter IV, Capcom, Daigo Ikeno.",
   "section": "3D Render"
  },
  {

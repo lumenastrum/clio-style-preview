@@ -1,10 +1,10 @@
 # 💅 Clio Style Library
 
-**398 art-style prompts as a ComfyUI node with live thumbnail previews, plus a gallery that lets you *see* the whole library on one subject before you pick.**
+**414 art-style prompts as a ComfyUI node with live thumbnail previews, plus a gallery that lets you *see* the whole library on one subject before you pick.**
 
 Built for [KREA 2 Turbo](https://huggingface.co/Comfy-Org/Krea-2) and other long-context text encoders (Qwen-family). Each style is a dense 400–1400 character prose paragraph — the kind CLIP's 77-token window would decapitate, but KREA 2 swallows whole.
 
-**🎭 [Live demo gallery](https://lumenastrum.github.io/clio-style-preview/)** — all 398 styles on one subject, one seed (512px demo set; clone the repo to render full-res on *your* subject).
+**🎭 [Live demo gallery](https://lumenastrum.github.io/clio-style-preview/)** — all 414 styles on one subject, one seed (512px demo set; clone the repo to render full-res on *your* subject).
 
 ![Split compare: Ghibli vs Yoshitaka Amano](docs/gallery-compare.png)
 
@@ -12,7 +12,7 @@ Built for [KREA 2 Turbo](https://huggingface.co/Comfy-Org/Krea-2) and other long
 
 | Piece | What it does |
 |---|---|
-| `__init__.py` + `styles.json` | The **ClioStyle** custom node — 398 styles, injected into your prompt as dense style prose — plus **ClioStyleEncode**, the same thing with a built-in text encode and a style **strength** slider |
+| `__init__.py` + `styles.json` | The **ClioStyle** custom node — 414 styles, injected into your prompt as dense style prose — plus **ClioStyleEncode**, the same thing with a built-in text encode and a style **strength** slider |
 | `web/` | The node's **in-node preview + visual style picker** — see a style before you commit to it, without leaving the graph |
 | `gallery/` | A self-contained style-preview gallery (vanilla JS, zero dependencies) with search, tradition filter, lightbox, and a **split-slider compare** |
 | `scripts/` | Headless pipeline: single gens with `--style`, and a batch runner that renders one subject through the *entire* library |
@@ -28,7 +28,7 @@ git clone https://github.com/lumenastrum/clio-style-preview clio-style-node
 
 You get a **💅 Clio Style Library** node with:
 
-- `prompt` — your subject. Keep it **medium-silent** (no "photo of", no "illustration of") — every style claims its own medium, and a medium word in the subject arm-wrestles all 398 of them.
+- `prompt` — your subject. Keep it **medium-silent** (no "photo of", no "illustration of") — every style claims its own medium, and a medium word in the subject arm-wrestles all 414 of them.
 - `style` — which style to apply. `✨ none` passes your prompt through untouched.
 - `template` — default `Style: {name}: {style}. Subject: {prompt}`. `{name}` is the style's name, `{style}` its prose paragraph, `{prompt}` your subject. The delimited style-first format keeps object-noun styles (LEGO, Funko…) from literalizing into the scene as their own entity instead of restyling your subject — tip courtesy of u/Dear-Spend-2865, the source of the style library itself (see issue #1 for before/afters). Putting the name back in front of the prose (as the original list wrote it) matters because most proses never say it themselves — Gravity Falls only looks like Gravity Falls once the name is in the prompt. Thanks to @JackPinette for catching it (issue #5). Workflows saved before this change keep their old template; drop `{name}: ` from the template to get the old behavior.
 
@@ -56,11 +56,11 @@ A style name tells you nothing. `Berserk Manga Style` and `Yoshitaka Amano Style
 
 ![The ClioStyle node showing a live in-node preview of the selected style](docs/node-preview.png)
 
-- **Click the preview** → a searchable grid of all 398 style previews, filterable by tradition. Click a card to set the style.
+- **Click the preview** → a searchable grid of all 414 style previews, filterable by tradition. Click a card to set the style.
 - **`‹` `›`** step through the library one style at a time (wrapping through `✨ none`) — good for browsing neighbours without opening anything.
 - **Hover** the preview to read the full style prose.
 
-![The visual style picker: 398 previews, searchable and filterable by tradition](docs/node-picker.png)
+![The visual style picker: 414 previews, searchable and filterable by tradition](docs/node-picker.png)
 
 The 512px thumbnails ship with the repo, so this works on a **fresh clone with no renders of your own**. Once you point the batch runner at *your* subject, the previews become your renders instead — same manifest, same node, no configuration.
 
@@ -73,7 +73,7 @@ Because the preview replaces it, the `style` dropdown is hidden rather than remo
 Render **one subject, one seed, every style** — then browse the results instead of reading prompt text. Same seed means compositions mostly align, which is what makes the **split slider** magic: drag the divider and watch one style melt into another on (almost) the same pixels. When a strong style bends the pose anyway — that's information too.
 
 ```
-# render your subject through all 398 styles (idempotent; re-run to resume)
+# render your subject through all 414 styles (idempotent; re-run to resume)
 python scripts/style_preview_batch.py --prompt "your subject here" --seed 1997
 
 # then serve the gallery (fetch() needs HTTP, file:// won't do)
