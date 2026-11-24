@@ -18,10 +18,20 @@ let pickerSingleton = null;
 async function getPicker() {
   if (pickerSingleton) return pickerSingleton;
 
-  const [manifest, styles] = await Promise.all([
+  const [manifest, styles, favList] = await Promise.all([
     fetch("/clio_style/gallery/manifest.json").then((r) => r.json()),
     fetch("/clio_style/styles.json").then((r) => r.json()).catch(() => []),
+    fetch("/clio_style/favorites", { cache: "no-cache" }).then((r) => r.json()).catch(() => []),
   ]);
+  const favorites = new Set(favList);
+  function setFavorite(style, on) {
+    if (on) favorites.add(style); else favorites.delete(style);
+    fetch("/clio_style/favorites", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ style, favorite: on }),
+    }).catch(() => {});
+  }
   const sectionOf = {};
   const sectionOrder = [];
   for (const e of styles) {
@@ -52,14 +62,26 @@ async function getPicker() {
     `<a href="/clio_style/gallery/index.html" target="_blank" style="color:${GOLD};font-size:12px;text-decoration:none;">open full gallery ↗</a>` +
     `<button style="background:none;border:none;color:#b48ea6;font-size:20px;cursor:pointer;line-height:1;">×</button>`;
 
+  // scroll container holds a favorites shelf (clones, never filtered/moved
+  // away) above the main grid (unaffected by favoriting — a starred tile
+  // never disappears from where the user is looking)
+  const scroll = document.createElement("div");
+  scroll.style.cssText = "flex:1;overflow-y:auto;padding:14px;";
+
+  const favRow = document.createElement("div");
+  favRow.style.cssText =
+    "display:none;grid-template-columns:repeat(auto-fill,150px);justify-content:center;" +
+    "gap:10px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px dashed #46293a;";
+
   const grid = document.createElement("div");
   // fixed tracks + explicit image heights: aspect-ratio/minmax sizing cycles
   // collapse to 4px rows inside ComfyUI's global CSS (grid row ← tile ← img)
   grid.style.cssText =
-    "flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,150px);" +
-    "grid-auto-rows:max-content;justify-content:center;gap:10px;padding:14px;align-content:start;";
+    "display:grid;grid-template-columns:repeat(auto-fill,150px);" +
+    "grid-auto-rows:max-content;justify-content:center;gap:10px;align-content:start;";
 
-  panel.append(header, grid);
+  scroll.append(favRow, grid);
+  panel.append(header, scroll);
   overlay.append(panel);
   document.body.append(overlay);
 
@@ -93,10 +115,74 @@ async function getPicker() {
     sectionOrder.map((s) => `<option value="${s}">${s}</option>`).join("");
 
   let current = null; // {node, styleWidget}
-  const tiles = images.map((entry) => {
+  const entryByStyle = new Map(images.map((e) => [e.style, e]));
+  const starEls = new Map(); // style -> [button, ...] currently in the DOM
+  const favClones = new Map(); // style -> clone tile currently shown in favRow
+
+  function paintStar(btn, style) {
+    const fav = favorites.has(style);
+    btn.textContent = fav ? "★" : "☆";
+    btn.style.color = fav ? GOLD : "#e9cddc";
+    btn.style.opacity = fav ? "1" : "0";
+  }
+
+  function toggleFavorite(style) {
+    const on = !favorites.has(style);
+    if (on) favorites.add(style); else favorites.delete(style);
+    setFavorite(style, on);
+    for (const btn of starEls.get(style) || []) paintStar(btn, style);
+    if (on) addFavClone(style, true); else removeFavClone(style);
+  }
+
+  function addFavClone(style, toFront) {
+    if (favClones.has(style)) return;
+    const entry = entryByStyle.get(style);
+    if (!entry) return;
+    const clone = buildTile(entry);
+    if (toFront) favRow.prepend(clone); else favRow.append(clone);
+    favClones.set(style, clone);
+    favRow.style.display = "grid";
+  }
+  // the picker (and its favorites Set) is built once and reused for the rest
+  // of the page's life — pull the current server state each time it opens, so
+  // a favorite added elsewhere (the gallery, another node) actually shows up
+  // instead of waiting for a full page reload
+  async function refreshFavorites() {
+    let list;
+    try {
+      list = await fetch("/clio_style/favorites", { cache: "no-cache" }).then((r) => r.json());
+    } catch {
+      return;
+    }
+    const fresh = new Set(list || []);
+    for (const style of new Set([...favorites, ...fresh])) {
+      const was = favorites.has(style);
+      const now = fresh.has(style);
+      if (was === now) continue;
+      if (now) favorites.add(style); else favorites.delete(style);
+      for (const btn of starEls.get(style) || []) paintStar(btn, style);
+      if (now) addFavClone(style, false); else removeFavClone(style);
+    }
+  }
+
+  function removeFavClone(style) {
+    const clone = favClones.get(style);
+    if (!clone) return;
+    const arr = starEls.get(style);
+    if (arr) {
+      const btn = clone.querySelector("button");
+      const i = arr.indexOf(btn);
+      if (i !== -1) arr.splice(i, 1);
+    }
+    clone.remove();
+    favClones.delete(style);
+    if (!favClones.size) favRow.style.display = "none";
+  }
+
+  function buildTile(entry) {
     const tile = document.createElement("div");
     tile.style.cssText =
-      "cursor:pointer;border:2px solid transparent;border-radius:10px;overflow:hidden;" +
+      "position:relative;cursor:pointer;border:2px solid transparent;border-radius:10px;overflow:hidden;" +
       "background:#241722;transition:border-color .12s;";
     tile.dataset.style = entry.style;
     tile.dataset.section = sectionOf[entry.style] || "";
@@ -110,9 +196,28 @@ async function getPicker() {
     label.style.cssText =
       "padding:5px 7px;font-size:11px;color:#e9cddc;line-height:1.3;display:-webkit-box;" +
       "-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em;";
-    tile.append(im, label);
-    tile.addEventListener("mouseenter", () => { if (tile.style.borderColor !== GOLD) tile.style.borderColor = "#7a3b5e"; });
-    tile.addEventListener("mouseleave", () => { if (tile.dataset.style !== current?.styleWidget?.value) tile.style.borderColor = "transparent"; });
+
+    const star = document.createElement("button");
+    star.style.cssText =
+      "position:absolute;top:4px;right:4px;z-index:1;width:22px;height:22px;border:none;border-radius:50%;" +
+      "background:rgba(10,6,9,.55);font-size:13px;line-height:1;cursor:pointer;padding:0;transition:opacity .12s;";
+    paintStar(star, entry.style);
+    if (!starEls.has(entry.style)) starEls.set(entry.style, []);
+    starEls.get(entry.style).push(star);
+    star.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleFavorite(entry.style);
+    });
+
+    tile.append(im, star, label);
+    tile.addEventListener("mouseenter", () => {
+      if (tile.style.borderColor !== GOLD) tile.style.borderColor = "#7a3b5e";
+      if (!favorites.has(entry.style)) star.style.opacity = "1";
+    });
+    tile.addEventListener("mouseleave", () => {
+      if (tile.dataset.style !== current?.styleWidget?.value) tile.style.borderColor = "transparent";
+      if (!favorites.has(entry.style)) star.style.opacity = "0";
+    });
     tile.addEventListener("click", () => {
       if (!current) return;
       const { node, styleWidget } = current;
@@ -121,9 +226,16 @@ async function getPicker() {
       node.setDirtyCanvas(true, true);
       hide();
     });
+    return tile;
+  }
+
+  const tiles = images.map((entry) => {
+    const tile = buildTile(entry);
     grid.append(tile);
     return tile;
   });
+  // seed the shelf from what was already favorited (server order, no reshuffle)
+  for (const style of favorites) addFavClone(style, false);
 
   function applyFilter() {
     const q = search.value.trim().toLowerCase();
@@ -144,18 +256,19 @@ async function getPicker() {
   }
   function show(node, styleWidget) {
     current = { node, styleWidget };
+    refreshFavorites(); // fire-and-forget — opens instantly on last-known state, self-heals moments later
     search.value = ""; tradSel.value = ""; applyFilter();
     let selected = null;
-    for (const tile of tiles) {
+    for (const tile of [...tiles, ...favClones.values()]) {
       const isSel = tile.dataset.style === styleWidget.value;
       tile.style.borderColor = isSel ? GOLD : "transparent";
-      if (isSel) selected = tile;
+      if (isSel && !selected) selected = tile;
     }
     noneBtn.style.borderColor = styleWidget.value === NONE ? GOLD : "#46293a";
     overlay.style.display = "flex";
     document.addEventListener("keydown", onKey, true);
     if (selected) selected.scrollIntoView({ block: "center" });
-    else grid.scrollTop = 0;
+    else scroll.scrollTop = 0;
     search.focus();
   }
   overlay.addEventListener("click", (e) => { if (e.target === overlay) hide(); });

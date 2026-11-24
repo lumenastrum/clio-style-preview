@@ -252,6 +252,38 @@
   }
   .tile.pinned .pin-order { display: grid; }
 
+  .star-btn {
+    position: absolute;
+    top: 8px; right: 44px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: rgba(15, 9, 19, .72);
+    backdrop-filter: blur(4px);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1;
+    color: var(--muted);
+    opacity: 0;
+    transition: opacity .15s ease, transform .15s ease, color .15s ease;
+  }
+  .tile:hover .star-btn, .star-btn.active, .star-btn:focus-visible { opacity: 1; }
+  .star-btn:hover { transform: scale(1.12); }
+  .star-btn.active { color: var(--gold); }
+
+  /* favorites shelf: a fixed shortlist above the section grid — starring a
+     tile copies it up here instead of moving the original out of place */
+  .fav-row { margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px dashed var(--line); }
+  .fav-label {
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
   .empty-state {
     text-align: center;
     padding: 70px 20px;
@@ -735,6 +767,8 @@
   var tradOrder = [];         // wings in library order of first appearance
   var filtered = [];          // filtered image entries of active section
   var pinned = [];            // [{section, style, file, thumb}] max 2, FIFO
+  var favorites = {};         // style -> true; shared with the ClioStyle node via /clio_style/favorites
+  var favBtns = {};           // style -> [button, ...] currently in the DOM (main tile + shelf clone)
   var lbIndex = -1;
   var splitPos = 0.5;
   var styleTexts = {};        // style name -> full prose paragraph (from styles.json when reachable)
@@ -820,6 +854,147 @@
   function stylePrePrompt(sectionKey, style) {
     // everything before the subject slot, style filled in — paste it ahead of your own prompt
     return fillStyle(copyTemplate(sectionKey).split("{prompt}")[0], style).trim();
+  }
+
+  // favorites are shared with the ClioStyle node through the same server routes —
+  // only reachable when this gallery is served by ComfyUI itself; standalone/GH-Pages
+  // copies just fail the fetch and favorites quietly stay off
+  fetch("/clio_style/favorites", { cache: "no-cache" })
+    .then(function (r) { return r.ok ? r.json() : []; })
+    .then(function (list) {
+      (list || []).forEach(function (s) { favorites[s] = true; });
+    })
+    .catch(function () {})
+    .then(function () {
+      if (manifest) applyFilter(); // manifest already rendered without favorites — redraw once
+    });
+
+  function persistFavorite(style, on) {
+    fetch("/clio_style/favorites", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ style: style, favorite: on }),
+    }).catch(function () {});
+  }
+
+  function paintStar(btn, style) {
+    var on = !!favorites[style];
+    btn.textContent = on ? "★" : "☆";
+    btn.classList.toggle("active", on);
+  }
+
+  function toggleFavorite(item) {
+    var on = !favorites[item.style];
+    if (on) favorites[item.style] = true; else delete favorites[item.style];
+    persistFavorite(item.style, on);
+    (favBtns[item.style] || []).forEach(function (btn) { paintStar(btn, item.style); });
+    if (on) addFavShelf(item); else removeFavShelf(item.style);
+  }
+
+  function addFavShelf(item) {
+    var row = els.main.querySelector(".fav-row");
+    if (!row) {
+      row = document.createElement("div");
+      row.className = "fav-row";
+      var label = document.createElement("div");
+      label.className = "fav-label";
+      label.textContent = "★ favorites";
+      var favGrid = document.createElement("div");
+      favGrid.className = "grid";
+      row.appendChild(label);
+      row.appendChild(favGrid);
+      els.main.insertBefore(row, els.main.firstChild);
+    }
+    var favGrid2 = row.querySelector(".grid");
+    if (favGrid2.querySelector('[data-style="' + cssEsc(item.style) + '"]')) return;
+    favGrid2.insertBefore(buildTile(item, filtered.indexOf(item)), favGrid2.firstChild);
+  }
+
+  function removeFavShelf(style) {
+    var row = els.main.querySelector(".fav-row");
+    if (!row) return;
+    var favGrid = row.querySelector(".grid");
+    var clone = favGrid.querySelector('[data-style="' + cssEsc(style) + '"]');
+    if (clone) {
+      var btn = clone.querySelector(".star-btn");
+      var arr = favBtns[style];
+      if (arr && btn) { var i = arr.indexOf(btn); if (i !== -1) arr.splice(i, 1); }
+      clone.remove();
+    }
+    if (!favGrid.children.length) row.remove();
+  }
+
+  // CSS.escape isn't available in every target here — style names can contain
+  // quotes/backslashes, so build the attribute selector by hand
+  function cssEsc(s) {
+    return String(s).replace(/["\\]/g, "\\$&");
+  }
+
+  function buildTile(item, idx) {
+    var tile = document.createElement("div");
+    tile.className = "tile" + (isPinned(activeSection, item.style) !== -1 ? " pinned" : "");
+    tile.dataset.style = item.style;
+    tile.tabIndex = 0;
+    tile.setAttribute("role", "button");
+    tile.setAttribute("aria-label", item.style);
+
+    var img = document.createElement("img");
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.alt = item.style;
+    img.src = uri(item.thumb || item.file);
+    img.onerror = function () {
+      if (item.file && img.src.indexOf(uri(item.file)) === -1) {
+        img.src = uri(item.file);
+      } else {
+        img.onerror = null;
+        img.remove();
+      }
+    };
+
+    var cap = document.createElement("div");
+    cap.className = "caption";
+    cap.textContent = item.style;
+
+    var pinBtn = document.createElement("button");
+    pinBtn.className = "pin-btn";
+    pinBtn.title = "Compare this style";
+    pinBtn.setAttribute("aria-label", "Add " + item.style + " to compare");
+    pinBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 4h6l-1 7 3 3v2H7v-2l3-3-1-7Z"/><path d="M12 16v5"/></svg>';
+    pinBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      togglePin(item);
+    });
+
+    var order = document.createElement("div");
+    order.className = "pin-order";
+    var pinIdx = isPinned(activeSection, item.style);
+    if (pinIdx !== -1) order.textContent = pinIdx + 1;
+
+    var starBtn = document.createElement("button");
+    starBtn.className = "star-btn";
+    starBtn.title = "Favorite this style";
+    starBtn.setAttribute("aria-label", "Favorite " + item.style);
+    paintStar(starBtn, item.style);
+    if (!favBtns[item.style]) favBtns[item.style] = [];
+    favBtns[item.style].push(starBtn);
+    starBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      toggleFavorite(item);
+    });
+
+    tile.appendChild(img);
+    tile.appendChild(cap);
+    tile.appendChild(pinBtn);
+    tile.appendChild(order);
+    tile.appendChild(starBtn);
+
+    tile.addEventListener("click", function () { openLightbox(idx); });
+    tile.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLightbox(idx); }
+    });
+
+    return tile;
   }
 
   // styles.json lives beside the gallery locally, or one level up in the repo layout
@@ -930,6 +1105,7 @@
 
   function renderGrid() {
     els.main.innerHTML = "";
+    favBtns = {};
     if (!filtered.length) {
       var total = (manifest.sections[activeSection] || {}).images || [];
       if (!total.length) {
@@ -939,61 +1115,28 @@
       }
       return;
     }
+
+    var favItems = filtered.filter(function (it) { return !!favorites[it.style]; });
+    if (favItems.length) {
+      var favRow = document.createElement("div");
+      favRow.className = "fav-row";
+      var favLabel = document.createElement("div");
+      favLabel.className = "fav-label";
+      favLabel.textContent = "★ favorites";
+      var favGrid = document.createElement("div");
+      favGrid.className = "grid";
+      favItems.forEach(function (item) {
+        favGrid.appendChild(buildTile(item, filtered.indexOf(item)));
+      });
+      favRow.appendChild(favLabel);
+      favRow.appendChild(favGrid);
+      els.main.appendChild(favRow);
+    }
+
     var grid = document.createElement("div");
     grid.className = "grid";
     filtered.forEach(function (item, idx) {
-      var tile = document.createElement("div");
-      tile.className = "tile";
-      tile.tabIndex = 0;
-      tile.setAttribute("role", "button");
-      tile.setAttribute("aria-label", item.style);
-
-      var pinIdx = isPinned(activeSection, item.style);
-      if (pinIdx !== -1) tile.classList.add("pinned");
-
-      var img = document.createElement("img");
-      img.loading = "lazy";
-      img.decoding = "async";
-      img.alt = item.style;
-      img.src = uri(item.thumb || item.file);
-      img.onerror = function () {
-        if (item.file && img.src.indexOf(uri(item.file)) === -1) {
-          img.src = uri(item.file); // thumb missing → fall back to full-res
-        } else {
-          img.onerror = null;
-          img.remove(); // both missing → leave gradient placeholder
-        }
-      };
-
-      var cap = document.createElement("div");
-      cap.className = "caption";
-      cap.textContent = item.style;
-
-      var pinBtn = document.createElement("button");
-      pinBtn.className = "pin-btn";
-      pinBtn.title = "Compare this style";
-      pinBtn.setAttribute("aria-label", "Add " + item.style + " to compare");
-      pinBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 4h6l-1 7 3 3v2H7v-2l3-3-1-7Z"/><path d="M12 16v5"/></svg>';
-      pinBtn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        togglePin(item);
-      });
-
-      var order = document.createElement("div");
-      order.className = "pin-order";
-      if (pinIdx !== -1) order.textContent = pinIdx + 1;
-
-      tile.appendChild(img);
-      tile.appendChild(cap);
-      tile.appendChild(pinBtn);
-      tile.appendChild(order);
-
-      tile.addEventListener("click", function () { openLightbox(idx); });
-      tile.addEventListener("keydown", function (e) {
-        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLightbox(idx); }
-      });
-
-      grid.appendChild(tile);
+      grid.appendChild(buildTile(item, idx));
     });
     els.main.appendChild(grid);
   }
