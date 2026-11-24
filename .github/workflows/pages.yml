@@ -15,16 +15,24 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # upload and deploy live in separate jobs on purpose: in one job, deploy-pages
+  # can list artifacts before the fresh upload is visible and fail with
+  # "No artifacts named github-pages" (actions/deploy-pages#451)
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: '.'
+
   deploy:
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: '.'
-      - uses: actions/deploy-pages@v4
+      - uses: actions/deploy-pages@v5
         id: deployment
