@@ -306,8 +306,9 @@ app.registerExtension({
 
       requestAnimationFrame(() => {
         // +60 over the computed minimum: LiteGraph's minimum only budgets ~2
-        // lines for the prompt textarea (the node's flexible widget)
-        this.setSize([Math.max(this.size[0], 260), this.computeSize()[1] + 60]);
+        // lines for the prompt textarea (the node's flexible widget). Grow only:
+        // on workflow load this fires after onConfigure restored the saved size
+        this.setSize([Math.max(this.size[0], 260), Math.max(this.size[1], this.computeSize()[1] + 60)]);
       });
       return r;
     };
